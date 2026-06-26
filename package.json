@@ -1,0 +1,20 @@
+{
+  "name": "@pipeworx/mcp-legislation-uk",
+  "version": "0.1.0",
+  "description": "legislation.gov.uk MCP — the UK's official legislation database.",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "keywords": ["mcp", "mcp-server", "model-context-protocol", "pipeworx", "legislation-uk"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pipeworx-io/mcp-legislation-uk"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}
