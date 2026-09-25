@@ -3,7 +3,7 @@
   "name": "io.github.pipeworx-io/legislation-uk",
   "title": "Legislation Uk",
   "description": "legislation.gov.uk MCP — the UK's official legislation database.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "websiteUrl": "https://pipeworx.io/packs/legislation-uk",
   "repository": {
     "url": "https://github.com/pipeworx-io/mcp-legislation-uk",
