@@ -2,7 +2,7 @@
 
 UK legislation from [legislation.gov.uk](https://www.legislation.gov.uk) — the official database of UK Acts and statutory instruments. Search for legislation, read its metadata, read the actual text of an Act or of one section in the version you choose (as amended, as enacted, or as it stood on a date), see what has amended it (or what it amends), and read the plain-language Explanatory Notes.
 
-Part of [Pipeworx](https://pipeworx.io) — an MCP gateway connecting AI agents to 1679+ live data sources.
+Part of [Pipeworx](https://pipeworx.io) — an MCP gateway connecting AI agents to 1683+ live data sources.
 
 Covers England, Wales, Scotland and Northern Ireland: `ukpga` (UK Public General Acts), `uksi` (UK Statutory Instruments), `asp` (Acts of the Scottish Parliament), `anaw`/`asc` (Wales), `nia` (Northern Ireland Acts), `ukla` (UK Local Acts).
 
@@ -85,7 +85,7 @@ directly, instead of just this one's:
 }
 ```
 
-Both URLs reach the same gateway and the same 1679+ data sources. The
+Both URLs reach the same gateway and the same 1683+ data sources. The
 only difference is which pack's tools are listed **directly**; `ask_pipeworx`
 reaches all of them from either one.
 
