@@ -778,7 +778,8 @@ const tools: McpToolExport['tools'] = [
     description:
       'Search UK legislation by title words (and optional year), returning matching Acts/instruments with their full-text URLs. ' +
       `UK legislation only. Source: legislation.gov.uk Atom feed. Document types: ${TYPES}. ` +
-      `"type" is optional: give an exact code (e.g. "ukpga"), a plain category ("act", "si", "ssi"), or omit it entirely — omitted defaults to "${DEFAULT_TYPE}" and the response says so.`,
+      `"type" is optional: give an exact code (e.g. "ukpga"), a plain category ("act", "si", "ssi"), or omit it entirely — omitted defaults to "${DEFAULT_TYPE}" and the response says so. ` +
+      'A zero-match result carries a "hint" explaining why (legislation.gov.uk\'s own search is CDN-cached for up to an hour, so a genuine no-match and a stale cached page look identical) — never a bare empty "results".',
     inputSchema: {
       type: 'object',
       properties: {
@@ -945,6 +946,20 @@ async function searchLegislation(args: Record<string, unknown>): Promise<unknown
     });
   }
 
+  // SAY WHY it's empty rather than handing back a bare `results: []` — the
+  // silent-zero case (docs/silent-zero-policy.md). This search's zero-match
+  // and "we got a stale cached page from a backend blip a moment ago" look
+  // byte-for-byte identical (both are a feed with no <entry> elements), and
+  // legislation.gov.uk's own CloudFront front end caches this exact query
+  // for up to an hour (`Cache-Control: public, max-age=3600`) — a transient
+  // hiccup there reads as a genuine zero for anyone hitting the same query
+  // within that window, us included. Say both possibilities rather than
+  // asserting "nothing exists," and point at the closer tool for a caller
+  // who already knows the citation.
+  const emptyHint = results.length === 0
+    ? `No "${type}" legislation matched title "${title}"${year !== undefined ? ` in ${year}` : ''}. Two things read identically here: a genuine no-match, and a stale cached page — legislation.gov.uk's search is served through a CDN that caches each exact query for up to an hour, so a brief backend hiccup can occasionally serve an empty result to every caller of that same query for the rest of the hour. If you expected a known Act/instrument: retry in a few minutes, try a broader or different title fragment, try a different type (${TYPES}), or if you already know the year and number, call get_legislation directly instead of searching.`
+    : null;
+
   return {
     source: 'legislation.gov.uk',
     note: 'UK legislation only. Parsed best-effort from an Atom feed.' + (typeNote ? ` ${typeNote}` : ''),
@@ -953,6 +968,7 @@ async function searchLegislation(args: Record<string, unknown>): Promise<unknown
     totalResults,
     count: results.length,
     results,
+    hint: emptyHint,
     feed_url: url,
   };
 }
@@ -1206,7 +1222,24 @@ async function getLegislationText(args: Record<string, unknown>): Promise<unknow
 }
 
 async function getText(url: string): Promise<string> {
-  const res = await pwFetch(url, { headers: { Accept: 'application/atom+xml, application/xml', 'User-Agent': UA } });
+  // `cf: { cacheTtl: 0 }` — legislation.gov.uk serves this feed with
+  // `Cache-Control: public, max-age=3600, s-maxage=3600` and is itself
+  // fronted by CloudFront (observed live: `X-Cache: Hit from cloudfront`),
+  // which already caches each exact query URL for up to an hour on ITS side.
+  // We cannot un-cache their CDN, but we can make sure OUR OWN egress never
+  // adds a second hour-long cache on top of it — forcing every call here to
+  // round-trip to CloudFront fresh rather than potentially replaying a stale
+  // copy from inside Cloudflare's own network. This surfaced as fleet #3120:
+  // search_uk_legislation came back with zero <entry> elements on 6/14
+  // monitor calls in 7 days for a query ("equality"/ukpga) that reliably
+  // returns 4 real Acts on every fresh probe — every failure paired an
+  // immediate retry landing on the IDENTICAL empty result at the same
+  // second, which is the signature of a cached response surviving a retry,
+  // not of per-request upstream noise.
+  const res = await pwFetch(url, {
+    headers: { Accept: 'application/atom+xml, application/xml', 'User-Agent': UA },
+    cf: { cacheTtl: 0 },
+  });
   const body = await res.text();
   if (!res.ok) throw new Error(`legislation.gov.uk: ${res.status} ${body.slice(0, 200)}`);
   return body;

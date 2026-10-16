@@ -1,6 +1,6 @@
 {
   "name": "@pipeworx/mcp-legislation-uk",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "legislation.gov.uk MCP — the UK's official legislation database.",
   "type": "module",
   "main": "src/index.ts",
@@ -26,7 +26,7 @@
     "@cloudflare/workers-types": "^4.20260405.1"
   },
   "pipeworx": {
-    "sourceHash": "v1-5d6ee5fcac1c88ad132a6a3afbcaeb4b2a4e5381e585bbd71632536b68eb7bad",
-    "sourceCommit": "1064560fd9dcd0d6fc2606298c2ba244b3a1fbeb"
+    "sourceHash": "v1-93a1f3a23ffed225e2505613e2eff16419fd7914b45bb18f87bf5a30c6129a9c",
+    "sourceCommit": "fe38188882d0fe91e5a45d82b7b989b4aae1e8b6"
   }
 }
