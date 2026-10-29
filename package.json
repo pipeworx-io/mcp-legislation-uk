@@ -1,12 +1,20 @@
 {
   "name": "@pipeworx/mcp-legislation-uk",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "legislation.gov.uk MCP — the UK's official legislation database.",
   "type": "module",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./tools.json": "./tools.json",
+    "./package.json": "./package.json"
+  },
   "bin": {
     "mcp-legislation-uk": "bin/cli.js"
+  },
+  "files": ["bin/", "lib/", "tools.json", "server.json"],
+  "engines": {
+    "node": ">=18"
   },
   "keywords": ["mcp", "mcp-server", "model-context-protocol", "pipeworx", "legislation-uk"],
   "license": "MIT",
@@ -14,19 +22,12 @@
     "type": "git",
     "url": "git+https://github.com/pipeworx-io/mcp-legislation-uk.git"
   },
-  "scripts": {
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.30.0",
-    "tsx": "^4.19.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.9.3",
-    "@cloudflare/workers-types": "^4.20260405.1"
-  },
+  "mcpName": "io.github.pipeworx-io/legislation-uk",
   "pipeworx": {
-    "sourceHash": "v1-c6bd554dba8c571f917def3e0d80fed175ec45b8680c1274de19c99f7c90a60f",
-    "sourceCommit": "33741fe6d9ba71856e73fa683c73572d1ddf2e93"
+    "mode": "gateway",
+    "slug": "legislation-uk",
+    "gatewaySlug": "legislation-uk",
+    "sourceHash": "v1-05b047c69667a93ce31af027599bdde13a7d0467a0b1cc689a28c300fadc3ea7",
+    "sourceCommit": "5c89d6abb778d45da5d92002eb251978622bedf9"
   }
 }
