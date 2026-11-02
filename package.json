@@ -1,6 +1,6 @@
 {
   "name": "@pipeworx/mcp-legislation-uk",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "legislation.gov.uk MCP — the UK's official legislation database.",
   "type": "module",
   "main": "lib/index.js",
@@ -27,7 +27,7 @@
     "mode": "gateway",
     "slug": "legislation-uk",
     "gatewaySlug": "legislation-uk",
-    "sourceHash": "v1-05b047c69667a93ce31af027599bdde13a7d0467a0b1cc689a28c300fadc3ea7",
-    "sourceCommit": "5c89d6abb778d45da5d92002eb251978622bedf9"
+    "sourceHash": "v1-5438cf2b6ae020a61184a96cc06dc894e56188c55d16464af4b1994e3695d0f0",
+    "sourceCommit": "236b0a46d91f343fe094da9f499c378e88f78312"
   }
 }
